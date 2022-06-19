@@ -2,9 +2,8 @@ import PropTypes from 'prop-types';
 import AlertsContext from 'contexts/AlertsContext';
 import { useContext } from 'react';
 import { useMutation } from '@apollo/client';
-import { GET_CLIENTS } from 'graphql/queries/clientQueries';
 import { GET_PROJECTS } from 'graphql/queries/projectQueries';
-import { DELETE_CLIENT } from 'graphql/mutations/clientMutations';
+import { DELETE_PROJECT } from 'graphql/mutations/projectMutation';
 import { Fragment, useState } from 'react';
 
 import Modal from 'react-bootstrap/Modal';
@@ -12,32 +11,21 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { FaTrash, FaPen } from 'react-icons/fa';
 
-const ClientTableRow = ({ client, setUpdateModalVisibility, setClientUpdateFormData }) => {
-    const { id, name, email, phone } = client;
+const ProjectTableRow = ({ project, setProjectUpdateModalVisibility, setProjectUpdateFormData }) => {
+    const { id, name, status } = project;
     const { createAlert } = useContext(AlertsContext);
 
     const [isModalVisible, setModalVisibility] = useState(false);
 
-    const [deleteClient] = useMutation(DELETE_CLIENT, {
+    const [deleteProject] = useMutation(DELETE_PROJECT, {
         variables: { id },
-        //refetchQueries: [{ query: GET_CLIENTS }],
-        update: (cache, { data: { deleteClient } }) => {
+        update: (cache, { data: { deleteProject }}) => {
             const { projects } = cache.readQuery({ query: GET_PROJECTS });
+
             cache.writeQuery({
                 query: GET_PROJECTS,
                 data: {
-                    projects: projects.filter(project => {
-                        console.log(project);
-                        return project.client.id !== deleteClient.id;
-                    })
-                }
-            });
-
-            const { clients } = cache.readQuery({ query: GET_CLIENTS });
-            cache.writeQuery({
-                query: GET_CLIENTS,
-                data: {
-                    clients: clients.filter(client => client.id !== deleteClient.id)
+                    projects: projects.filter(project => project.id !== deleteProject.id)
                 }
             });
         }
@@ -53,17 +41,16 @@ const ClientTableRow = ({ client, setUpdateModalVisibility, setClientUpdateFormD
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setModalVisibility(false)}>Close</Button>
                     <Button variant="danger" onClick={() => {
-                        deleteClient();
+                        deleteProject();
                         setModalVisibility(false);
-                        createAlert(`Deleted user: ${client.name} successfully!`);
+                        createAlert(`Deleted project: ${name} successfully!`);
                     }}>Delete User</Button>
                 </Modal.Footer>
             </Modal>
             <tr>
                 <th scope='row'>{id}</th>
                 <td>{name}</td>
-                <td><a href={`mailto:${email}`}>{email}</a></td>
-                <td>{phone}</td>
+                <td>{status}</td>
                 <td style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -72,20 +59,20 @@ const ClientTableRow = ({ client, setUpdateModalVisibility, setClientUpdateFormD
                     <ButtonGroup>
                         <Button variant='danger' onClick={() => setModalVisibility(true)}><FaTrash /></Button>
                         <Button variant='secondary' onClick={() => {
-                            setClientUpdateFormData(client);
-                            setUpdateModalVisibility(true);
+                            setProjectUpdateFormData({ ...project, clientId: project.client.id });
+                            setProjectUpdateModalVisibility(true);
                         }}><FaPen /></Button>
                     </ButtonGroup>
                 </td>
             </tr>
         </Fragment>
-    );
+    )
 }
 
-ClientTableRow.propTypes = {
-    client: PropTypes.object.isRequired,
-    setUpdateModalVisibility: PropTypes.func.isRequired,
-    setClientUpdateFormData: PropTypes.func.isRequired
+ProjectTableRow.propTypes = {
+    project: PropTypes.object.isRequired,
+    setProjectUpdateModalVisibility: PropTypes.func.isRequired,
+    setProjectUpdateFormData: PropTypes.func.isRequired,
 }
 
-export default ClientTableRow;
+export default ProjectTableRow;

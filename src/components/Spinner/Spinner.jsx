@@ -5,9 +5,13 @@ import BootstrapSpinner from 'react-bootstrap/Spinner';
 
 const Spinner = () => {
     return (
-        <Container fluid>
+        <Container>
             <Row>
-                <Col>
+                <Col style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    justifyItems: 'center'
+                }}>
                     <BootstrapSpinner animation='border' variant='primary' />
                 </Col>
             </Row>

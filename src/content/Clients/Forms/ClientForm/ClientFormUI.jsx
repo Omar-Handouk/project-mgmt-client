@@ -9,13 +9,14 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-const AddClientUI = ({
+const ClientFormUI = ({
     name,
     email,
     phone,
     isValidated,
     isModalVisible,
     isSubmitButtonActive,
+    isUpdate,
     onChange,
     onSubmit,
     onClose,
@@ -25,7 +26,7 @@ const AddClientUI = ({
     return (
         <Modal show={isModalVisible} onHide={onClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Add a new client</Modal.Title>
+                <Modal.Title>{isUpdate ? 'Update client' : 'Add a new client'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Container fluid>
@@ -81,23 +82,24 @@ const AddClientUI = ({
                         formEl.current.requestSubmit();
                     }
                 }}>
-                    Add client
+                    {isUpdate ? 'Update' : 'Add'} user
                 </Button>
             </Modal.Footer>
         </Modal>
     );
 }
 
-AddClientUI.propTypes = {
+ClientFormUI.propTypes = {
     name: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     phone: PropTypes.string.isRequired,
     isValidated: PropTypes.bool.isRequired,
     isModalVisible: PropTypes.bool.isRequired,
     isSubmitButtonActive: PropTypes.bool.isRequired,
+    isUpdate: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired
 }
 
-export default AddClientUI;
+export default ClientFormUI;

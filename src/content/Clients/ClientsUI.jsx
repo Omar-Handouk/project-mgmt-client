@@ -7,19 +7,28 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
-import AddClient from './Forms/AddClient';
+import { FaPlus } from 'react-icons/fa';
+
+import ClientForm from './Forms/ClientForm';
 import ClientTableRow from './ClientsTableRow';
 
-const ClientsUI = ({ data: { clients } }) => {
-    const [isModalVisibile, setModalVisibility] = useState(false);
+const ClientsUI = ({ clients, clientUpdateFormData, setClientUpdateFormData }) => {
+    const [isClientAddModalVisible, setClientAddModalVisibility] = useState(false);
+    const [isClientUpdateModalVisible, setClientUpdateModalVisibility] = useState(false);
 
     const tableRows = useMemo(() => {
-        return clients.map(client => <ClientTableRow key={client.id} client={client} />);
-    }, [clients]);
+        return clients.map(client => (<ClientTableRow
+            key={client.id}
+            client={client}
+            setUpdateModalVisibility={setClientUpdateModalVisibility}
+            setClientUpdateFormData={setClientUpdateFormData}
+        />));
+    }, [clients, setClientUpdateFormData]);
 
     return (
-        <Container className="mt-5">
-            <AddClient isModalVisibile={isModalVisibile} setModalVisibility={setModalVisibility} />
+        <Container className="mt-3">
+            <ClientForm isModalVisibile={isClientAddModalVisible} setModalVisibility={setClientAddModalVisibility} />
+            <ClientForm isModalVisibile={isClientUpdateModalVisible} setModalVisibility={setClientUpdateModalVisibility} isUpdate client={clientUpdateFormData} />
             <Row className='mb-2'>
                 <Col>
                     <h1>Clients</h1>
@@ -28,7 +37,11 @@ const ClientsUI = ({ data: { clients } }) => {
             </Row>
             <Row className="mb-4">
                 <Col>
-                    <Button variant='secondary' onClick={() => setModalVisibility(true)}>Add Client</Button>
+                    <Button variant='primary' onClick={() => setClientAddModalVisibility(true)} size='sm'>
+                        <span>
+                            <FaPlus /> Add Client
+                        </span>
+                    </Button>
                 </Col>
             </Row>
             <Row>
@@ -54,7 +67,9 @@ const ClientsUI = ({ data: { clients } }) => {
 }
 
 ClientsUI.propTypes = {
-    data: PropTypes.object
+    clients: PropTypes.array.isRequired,
+    clientUpdateFormData: PropTypes.object.isRequired,
+    setClientUpdateFormData: PropTypes.func.isRequired
 }
 
 export default ClientsUI;

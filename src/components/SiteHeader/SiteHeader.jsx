@@ -9,7 +9,8 @@ import Container from 'react-bootstrap/Container';
 
 const routes = [
     { path: '/', linkBody: 'Home' },
-    { path: '/clients', linkBody: 'Clients' }
+    { path: '/clients', linkBody: 'Clients' },
+    { path: '/projects', linkBody: 'Projects' }
 ];
 
 const SiteHeader = () => {

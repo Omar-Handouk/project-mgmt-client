@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 
 const HomeUI = () => {
     return (
-        <Container className='mt-5'>
+        <Container className='mt-3'>
             <Row>
                 <Col>
                     <h1>Hello, React-Bootstrap!</h1>

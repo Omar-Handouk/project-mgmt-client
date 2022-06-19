@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_CLIENTS } from 'graphql/queries/clientQueries';
 
@@ -5,6 +6,8 @@ import ClientsUI from './ClientsUI';
 import Spinner from 'components/Spinner';
 
 const Clients = () => {
+    const [clientUpdateFormData, setClientUpdateFormData] = useState({ name: '', email: '', phone: '' });
+
     const {
         loading,
         error,
@@ -13,14 +16,18 @@ const Clients = () => {
 
     if (loading) {
         return (
-            <Spinner/>
+            <Spinner />
         );
     }
 
     return (
         !loading &&
         !error &&
-        <ClientsUI data={data} />
+        <ClientsUI
+            clients={data.clients}
+            clientUpdateFormData={clientUpdateFormData}
+            setClientUpdateFormData={setClientUpdateFormData}
+        />
     );
 }
 

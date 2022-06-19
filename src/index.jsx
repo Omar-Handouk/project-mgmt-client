@@ -10,14 +10,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 import App from 'App';
+import { AlertsProvider } from 'contexts/AlertsContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ApolloProvider client={apolloClient}>
-    <Router>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </Router>
+    <AlertsProvider>
+      <Router>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </Router>
+    </AlertsProvider>
   </ApolloProvider>
 );
