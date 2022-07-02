@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import AlertsContext from 'contexts/AlertsContext';
+import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { useMutation } from '@apollo/client';
 import { GET_PROJECTS } from 'graphql/queries/projectQueries';
@@ -12,14 +13,14 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { FaTrash, FaPen } from 'react-icons/fa';
 
 const ProjectTableRow = ({ project, setProjectUpdateModalVisibility, setProjectUpdateFormData }) => {
-    const { id, name, status } = project;
+    const { id, name, status, client: { name: clientName } } = project;
     const { createAlert } = useContext(AlertsContext);
 
     const [isModalVisible, setModalVisibility] = useState(false);
 
     const [deleteProject] = useMutation(DELETE_PROJECT, {
         variables: { id },
-        update: (cache, { data: { deleteProject }}) => {
+        update: (cache, { data: { deleteProject } }) => {
             const { projects } = cache.readQuery({ query: GET_PROJECTS });
 
             cache.writeQuery({
@@ -44,17 +45,20 @@ const ProjectTableRow = ({ project, setProjectUpdateModalVisibility, setProjectU
                         deleteProject();
                         setModalVisibility(false);
                         createAlert(`Deleted project: ${name} successfully!`);
-                    }}>Delete User</Button>
+                    }}>Delete project</Button>
                 </Modal.Footer>
             </Modal>
             <tr>
                 <th scope='row'>{id}</th>
-                <td>{name}</td>
+                <td>{clientName}</td>
+                <td>
+                    <Link to={`/projects/${id}`}>{name}</Link>
+                </td>
                 <td>{status}</td>
                 <td style={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    justifyItems: 'center'
+                    placeContent: 'center',
+                    placeItems: 'center'
                 }}>
                     <ButtonGroup>
                         <Button variant='danger' onClick={() => setModalVisibility(true)}><FaTrash /></Button>

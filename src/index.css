@@ -1,0 +1,5 @@
+.pm--center-element { 
+    display: flex;
+    place-content: center;
+    place-items: center;
+}

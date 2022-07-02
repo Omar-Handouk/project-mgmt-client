@@ -27,7 +27,6 @@ const ClientTableRow = ({ client, setUpdateModalVisibility, setClientUpdateFormD
                 query: GET_PROJECTS,
                 data: {
                     projects: projects.filter(project => {
-                        console.log(project);
                         return project.client.id !== deleteClient.id;
                     })
                 }
@@ -66,8 +65,8 @@ const ClientTableRow = ({ client, setUpdateModalVisibility, setClientUpdateFormD
                 <td>{phone}</td>
                 <td style={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    justifyItems: 'center'
+                    placeContent: 'center',
+                    placeItems: 'center'
                 }}>
                     <ButtonGroup>
                         <Button variant='danger' onClick={() => setModalVisibility(true)}><FaTrash /></Button>

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, useMemo } from 'react';
-import { Link, matchRoutes, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import plan from './plan.svg';
 
@@ -15,13 +15,23 @@ const routes = [
 
 const SiteHeader = () => {
     const location = useLocation();
-    const [{ route }] = matchRoutes(routes, location);
+    let { pathname } = location;
+    pathname = pathname
+        .split('/')
+        .filter(e => Boolean(e))
+        .map(e => e.toLocaleLowerCase().trim())
+        .reduce((prev, curr) => prev + '/' + curr, '');
 
     const [currentActiveLink, setCurrentActiveLink] = useState(undefined);
 
     useLayoutEffect(() => {
-        setCurrentActiveLink(routes.find(({ path }) => path === route.path)?.linkBody);
-    }, [route.path, setCurrentActiveLink]);
+        if (pathname === '') {
+            setCurrentActiveLink('Home');
+        } else {
+            setCurrentActiveLink(routes.find(({ path }) => path === pathname)?.linkBody);
+        }
+
+    }, [pathname, setCurrentActiveLink]);
 
     const navLinks = useMemo(() => {
         return routes.map(({ path, linkBody }, index) => {

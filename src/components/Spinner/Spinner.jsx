@@ -9,8 +9,8 @@ const Spinner = () => {
             <Row>
                 <Col style={{
                     display: 'flex',
-                    justifyContent: 'center',
-                    justifyItems: 'center'
+                    placeContent: 'center',
+                    placeItems: 'center'
                 }}>
                     <BootstrapSpinner animation='border' variant='primary' />
                 </Col>
